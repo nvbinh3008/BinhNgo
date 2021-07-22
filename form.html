@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p> <a href="chiTietSanPham.jsp?id=1"></a></p>
+    <!--
+        method=get: queryString
+        method=post: package/object
+        <input type
+        type: HTML4
+        text: single line, default
+        password: input mask
+        radio: select one, same name
+        checkbox: multi select, maybe samename
+        type: HTML (include javascript)
+        email: require email format
+        number: only number
+        hidden: không hiện lên màn hình, gửi lên server -> gửi ẩn
+        required = not empty
+
+        name: variable Name (server)
+        id (same name): server,css,label
+        value:
+        text: default value
+        radio, checkbox,option: return value
+        button: label
+    -->
+    <input type="text" name="abc" form="myform">
+    <form action="demo.html" method="post" id="myform">
+        <p>
+            <input type="text" name="username" id="username" placeholder="userName" required autofocus>
+        </p>
+        <p>
+            password <input type="password" name="password" id="password" required>
+        </p>
+        <p>
+            gender
+            <input type="radio" name="gd" id="gd" value="1">Male
+            <input type="radio" name="gd" id="gd" value="0">Female
+        </p>
+        <p>
+            Hobbies
+            <input type="checkbox" name="hb" id="hb" value="read">Reading
+            <input type="checkbox" name="hb" id="hb" value="shop">Shopping
+            <input type="checkbox" name="hb" id="hb" value="tral">Travle
+            <input type="checkbox" name="hb" id="hb" value="sport">Sport
+        </p>
+        <p>
+            email<input type="email" name="email" id="email" placeholder="username@domainName" autocomplete="off">
+            <input type="hidden" name="emailHidden" value="nvbinh@gmail.com">
+        </p>
+        <p>
+            <label for="payment"> Select the mode of payment: </label>
+            <input type="text" name="payment" list="paymentlist" id="payment" />
+            <datalist id="paymentlist">
+                <option value="Cash-on-Delivery">
+                <option value="Net Banking">
+                <option value="Credit Card">
+                <option value="Debit Card">
+                <option value="e-Gift Voucher">
+            </datalist>
+
+        </p>
+        <p>
+            Age <input type="number" name="age" id="age" min="18" max="65">
+        </p>
+        <p>
+            Birthday
+            <input type="date" name="birthday" id="birthday" min="7/11/2020">
+        </p>
+        <p>
+            Language 
+            <select name="lang" id="lang" size="1">
+                <option value="-1">Select one</option>
+                <option value="E">English</option>
+                <option value="F">French</option>
+                <option value="J">Japaness</option>
+                <option value="Vietnamese">Vietnam</option>
+            </select>
+        </p>
+        <p>
+                Language 
+                <select name="lang" id="lang" size="3" multiple>
+                    <option value="-1">Select one</option>
+                    <option value="E">English</option>
+                    <option value="F">French</option>
+                    <option value="J">Japaness</option>
+                    <option value="Vietnamese">Vietnam</option>
+                </select>
+            </p>
+            <p>Other information
+                <textarea name="other" id="other" cols="30" rows="10">value</textarea>
+            </p>
+
+        <p>
+            <input type="hidden" name="action" value="addCustomer">
+            <input type="submit" value="Đăng nhập">
+            <input type="reset" value="Clear">
+        </p>
+    </form>
+
+</body>
+
+</html>
