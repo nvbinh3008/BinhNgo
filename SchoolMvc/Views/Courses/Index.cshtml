@@ -1,0 +1,37 @@
+@model IEnumerable<SchoolMvc.Models.Course>
+@{
+    ViewData["Title"] = "Courses";
+}
+<section>
+    <h1>Courses</h1>
+    <p>
+        <!-- Outline displayed columns to orient the reader. -->
+        Each row shows the course title, duration, subject, and number of enrolled students.
+    </p>
+    <p>
+        <a class="btn" asp-action="Create">Create New Course</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Enrollments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.Subject?.Name</td>
+                    <td>@course.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@course.EndDate.ToString("yyyy-MM-dd")</td>
+                    <td>@course.StudentCourses.Count</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,38 @@
+@model SchoolMvc.Models.Course
+@{
+    ViewData["Title"] = "Create Course";
+}
+<section>
+    <h1>Create Course</h1>
+    <p>
+        <!-- Provide instructions for linking to subjects. -->
+        Select the subject to associate with the course and supply the time range.
+    </p>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SubjectId">Subject</label>
+            <select asp-for="SubjectId" asp-items="ViewBag.SubjectId" class="form-control"></select>
+            <span asp-validation-for="SubjectId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartDate"></label>
+            <input asp-for="StartDate" type="date" class="form-control" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EndDate"></label>
+            <input asp-for="EndDate" type="date" class="form-control" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn">Create</button>
+        <a class="btn" asp-action="Index">Back to List</a>
+    </form>
+</section>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

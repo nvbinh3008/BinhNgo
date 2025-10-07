@@ -1,0 +1,31 @@
+@model IEnumerable<SchoolMvc.Models.Subject>
+@{
+    ViewData["Title"] = "Subjects";
+}
+<section>
+    <h1>Subjects</h1>
+    <p>
+        <!-- Provide guidance on how the list is populated. -->
+        The list is retrieved via <code>SubjectsController.Index</code> using EF Core's <code>AsNoTracking</code> query.
+    </p>
+    <p>
+        <a class="btn" asp-action="Create">Create New Subject</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Number of Slots</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.NumberOfSlot</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

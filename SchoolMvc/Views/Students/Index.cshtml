@@ -1,0 +1,46 @@
+@model IEnumerable<SchoolMvc.Models.Student>
+@{
+    ViewData["Title"] = "Students";
+}
+<section>
+    <h1>Students</h1>
+    <p>
+        <!-- Mention eager loading for clarity. -->
+        The controller eagerly loads enrolled courses using <code>Include</code> and <code>ThenInclude</code> so you can see them here.
+    </p>
+    <p>
+        <a class="btn" asp-action="Create">Create New Student</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Enrolled Courses</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.Name</td>
+                    <td>@student.Dob.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <ul>
+                            @foreach (var enrollment in student.StudentCourses)
+                            {
+                                <li>
+                                    @enrollment.Course?.Title
+                                    @if (enrollment.Mark is not null)
+                                    {
+                                        <text>(Mark: @enrollment.Mark)</text>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,31 @@
+@{
+    // Shared layout contains navigation menu linking to each controller.
+    var title = ViewData["Title"] as string ?? "School MVC";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@title - School MVC</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="header">
+        <nav>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Subjects" asp-action="Index">Subjects</a>
+            <a asp-controller="Students" asp-action="Index">Students</a>
+            <a asp-controller="Courses" asp-action="Index">Courses</a>
+        </nav>
+    </header>
+    <main class="main">
+        @RenderBody()
+    </main>
+    <footer class="footer">
+        <p>&copy; @DateTime.Now.Year - School MVC sample.</p>
+    </footer>
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
