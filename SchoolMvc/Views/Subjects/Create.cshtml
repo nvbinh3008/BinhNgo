@@ -1,0 +1,28 @@
+@model SchoolMvc.Models.Subject
+@{
+    ViewData["Title"] = "Create Subject";
+}
+<section>
+    <h1>Create Subject</h1>
+    <p>
+        <!-- Explain validation and submit workflow. -->
+        Fill the form and submit. Server-side validation ensures required fields are provided before saving.
+    </p>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NumberOfSlot"></label>
+            <input asp-for="NumberOfSlot" class="form-control" type="number" />
+            <span asp-validation-for="NumberOfSlot" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn">Create</button>
+        <a class="btn" asp-action="Index">Back to List</a>
+    </form>
+</section>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

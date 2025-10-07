@@ -1,0 +1,28 @@
+@model SchoolMvc.Models.Student
+@{
+    ViewData["Title"] = "Create Student";
+}
+<section>
+    <h1>Create Student</h1>
+    <p>
+        <!-- Explain DateOnly support. -->
+        The date picker binds to the <code>DateOnly</code> property in the model. ASP.NET Core handles conversion automatically.
+    </p>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Dob"></label>
+            <input asp-for="Dob" type="date" class="form-control" />
+            <span asp-validation-for="Dob" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn">Create</button>
+        <a class="btn" asp-action="Index">Back to List</a>
+    </form>
+</section>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
