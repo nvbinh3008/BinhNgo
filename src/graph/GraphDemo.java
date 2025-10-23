@@ -21,6 +21,10 @@ public class GraphDemo { // Lớp GraphDemo chứa hàm main minh họa cách d�
 
         System.out.println("Do thi lien thong: " + graph.isConnected()); // In ra trạng thái liên thông của đồ thị
         System.out.println("Do thi co chu trinh: " + graph.hasCycle()); // In ra kết quả kiểm tra chu trình
+        System.out.println("Do thi co chu trinh le: " + graph.hasOddCycle()); // In ra kết quả kiểm tra chu trình độ dài lẻ
+        System.out.println("Do thi co chu trinh Euler: " + graph.hasEulerianCycle()); // In ra khả năng tồn tại chu trình Euler
+        System.out.println("Do thi co chu trinh Hamilton: " + graph.hasHamiltonianCycle()); // In ra khả năng tồn tại chu trình Hamilton
+        System.out.println("Do thi co chu trinh am: " + graph.hasNegativeCycle()); // In ra kết quả phát hiện chu trình âm
 
         List<City> bfsOrder = graph.breadthFirstTraversal(hanoi); // Thực hiện BFS từ Hà Nội
         System.out.println("Thu tu BFS: " + bfsOrder); // In ra thứ tự duyệt BFS

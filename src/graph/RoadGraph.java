@@ -99,6 +99,152 @@ public class RoadGraph { // Lớp RoadGraph quản lý đồ thị đường đi
         return false; // Không phát hiện chu trình từ nhánh hiện tại
     }
 
+    public boolean hasOddCycle() { // Kiểm tra đồ thị có chu trình độ dài lẻ hay không
+        int n = cities.size(); // Lấy số lượng thành phố trong đồ thị
+        if (n == 0) { // Nếu không có thành phố nào
+            return false; // Đồ thị rỗng nên không có chu trình
+        }
+        int[] color = new int[n]; // Mảng lưu màu của từng thành phố để kiểm tra tính hai phía
+        Arrays.fill(color, -1); // Gán tất cả giá trị ban đầu là -1 để biểu thị chưa tô màu
+        for (int startId = 0; startId < n; startId++) { // Duyệt qua từng thành phố làm điểm bắt đầu
+            if (color[startId] != -1) { // Nếu thành phố đã được tô màu trước đó
+                continue; // Bỏ qua vì đã thuộc một thành phần liên thông đã xét
+            }
+            if (detectOddCycleFrom(startId, color)) { // Gọi hàm phụ sử dụng BFS để tìm chu trình lẻ
+                return true; // Nếu phát hiện chu trình lẻ thì kết luận tồn tại
+            }
+        }
+        return false; // Sau khi duyệt hết các thành phần mà không tìm thấy thì trả về false
+    }
+
+    private boolean detectOddCycleFrom(int startId, int[] color) { // Hàm phụ duyệt BFS để phát hiện chu trình lẻ
+        Queue<Integer> queue = new ArrayDeque<>(); // Hàng đợi phục vụ cho quá trình tô màu xen kẽ
+        color[startId] = 0; // Tô màu ban đầu cho thành phố xuất phát
+        queue.add(startId); // Đưa thành phố xuất phát vào hàng đợi
+        while (!queue.isEmpty()) { // Lặp cho đến khi xử lý xong mọi thành phố có thể
+            int currentId = queue.remove(); // Lấy thành phố ở đầu hàng đợi ra xử lý
+            for (int neighborId : adjacencyList.get(currentId)) { // Duyệt qua các thành phố kề với thành phố hiện tại
+                if (color[neighborId] == -1) { // Nếu thành phố kề chưa được tô màu
+                    color[neighborId] = 1 - color[currentId]; // Tô màu đối lập với thành phố hiện tại
+                    queue.add(neighborId); // Thêm thành phố kề vào hàng đợi để tiếp tục xử lý
+                } else if (color[neighborId] == color[currentId]) { // Nếu gặp thành phố kề đã tô cùng màu
+                    return true; // Phát hiện chu trình lẻ vì đồ thị không thể tô hai màu
+                }
+            }
+        }
+        return false; // Không phát hiện chu trình lẻ trong thành phần liên thông hiện tại
+    }
+
+    public boolean hasEulerianCycle() { // Kiểm tra đồ thị có chu trình Euler hay không
+        if (cities.isEmpty()) { // Nếu chưa có thành phố nào trong đồ thị
+            return false; // Không có chu trình Euler trong đồ thị rỗng
+        }
+        int startId = -1; // Biến lưu chỉ số thành phố bắt đầu duyệt liên thông
+        for (int cityId = 0; cityId < cities.size(); cityId++) { // Duyệt qua các thành phố để tìm thành phố có cạnh
+            if (!adjacencyList.get(cityId).isEmpty()) { // Nếu thành phố có ít nhất một cạnh kề
+                startId = cityId; // Ghi nhận thành phố đó làm điểm bắt đầu
+                break; // Thoát vòng lặp vì đã tìm được điểm phù hợp
+            }
+        }
+        if (startId == -1) { // Nếu không tìm thấy thành phố nào có cạnh kề
+            return false; // Không thể tạo chu trình Euler vì đồ thị không có cạnh
+        }
+        Set<Integer> visited = new HashSet<>(); // Tập lưu các thành phố đã được duyệt
+        Queue<Integer> queue = new ArrayDeque<>(); // Hàng đợi dùng để kiểm tra tính liên thông của các cạnh
+        visited.add(startId); // Đánh dấu thành phố bắt đầu đã được duyệt
+        queue.add(startId); // Thêm thành phố bắt đầu vào hàng đợi
+        while (!queue.isEmpty()) { // Lặp cho đến khi xử lý hết các thành phố liên quan
+            int currentId = queue.remove(); // Lấy thành phố ở đầu hàng đợi ra xử lý
+            for (int neighborId : adjacencyList.get(currentId)) { // Duyệt qua từng thành phố kề
+                if (!visited.contains(neighborId)) { // Nếu thành phố kề chưa được duyệt
+                    visited.add(neighborId); // Đánh dấu thành phố kề đã được ghé
+                    queue.add(neighborId); // Thêm thành phố kề vào hàng đợi để kiểm tra tiếp
+                }
+            }
+        }
+        for (int cityId = 0; cityId < cities.size(); cityId++) { // Sau khi kiểm tra liên thông, duyệt lại từng thành phố
+            if (!adjacencyList.get(cityId).isEmpty() && !visited.contains(cityId)) { // Nếu thành phố có cạnh nhưng chưa được ghé
+                return false; // Không liên thông theo cạnh nên không thể có chu trình Euler
+            }
+        }
+        for (List<Integer> neighbors : adjacencyList) { // Duyệt qua từng danh sách kề để kiểm tra bậc đỉnh
+            if (neighbors.size() % 2 != 0) { // Nếu phát hiện thành phố có bậc lẻ
+                return false; // Chu trình Euler không tồn tại khi có đỉnh bậc lẻ
+            }
+        }
+        return true; // Nếu liên thông và mọi đỉnh có bậc chẵn thì tồn tại chu trình Euler
+    }
+
+    public boolean hasHamiltonianCycle() { // Kiểm tra đồ thị có chu trình Hamilton hay không
+        int n = cities.size(); // Lấy số lượng thành phố hiện có
+        if (n < 3) { // Nếu số thành phố ít hơn 3
+            return false; // Chu trình Hamilton cần ít nhất ba thành phố để tạo vòng khép kín
+        }
+        boolean[] visited = new boolean[n]; // Mảng đánh dấu các thành phố đã nằm trên đường đi hiện tại
+        visited[0] = true; // Chọn thành phố đầu tiên làm điểm xuất phát và đánh dấu đã ghé
+        return searchHamiltonianCycle(0, 0, visited, 1); // Gọi hàm đệ quy để thử xây dựng chu trình Hamilton
+    }
+
+    private boolean searchHamiltonianCycle(int currentId, int startId, boolean[] visited, int visitedCount) { // Hàm đệ quy tìm chu trình Hamilton
+        if (visitedCount == cities.size()) { // Nếu đã ghé qua đủ số lượng thành phố
+            for (int neighborId : adjacencyList.get(currentId)) { // Kiểm tra các cạnh xuất phát từ thành phố hiện tại
+                if (neighborId == startId) { // Nếu có cạnh quay về điểm xuất phát
+                    return true; // Đã hình thành chu trình Hamilton khép kín
+                }
+            }
+            return false; // Không có cạnh quay về điểm xuất phát nên không tạo thành chu trình hoàn chỉnh
+        }
+        for (int neighborId : adjacencyList.get(currentId)) { // Duyệt qua từng thành phố kề với thành phố hiện tại
+            if (!visited[neighborId]) { // Chỉ xét các thành phố chưa được ghé
+                visited[neighborId] = true; // Đánh dấu thành phố này đã được đưa vào đường đi
+                if (searchHamiltonianCycle(neighborId, startId, visited, visitedCount + 1)) { // Gọi đệ quy để tiếp tục mở rộng đường đi
+                    return true; // Nếu nhánh con tìm được chu trình Hamilton thì truyền kết quả lên
+                }
+                visited[neighborId] = false; // Quay lui và bỏ đánh dấu để thử nhánh khác
+            }
+        }
+        return false; // Thử hết các hàng xóm mà không tìm được chu trình thì trả về false
+    }
+
+    public boolean hasNegativeCycle() { // Kiểm tra đồ thị có chu trình âm hay không
+        int n = cities.size(); // Lấy số lượng thành phố trong đồ thị
+        if (n == 0) { // Nếu không có thành phố nào
+            return false; // Đồ thị rỗng nên không thể chứa chu trình âm
+        }
+        int[] distance = new int[n]; // Mảng lưu giá trị tạm thời để thư giãn các cạnh
+        Arrays.fill(distance, 0); // Khởi tạo tất cả khoảng cách bằng 0 giống như thêm một siêu nguồn
+        for (int iteration = 0; iteration < n - 1; iteration++) { // Thực hiện n-1 lần thư giãn cạnh theo Bellman-Ford
+            boolean updated = false; // Cờ đánh dấu xem lần lặp hiện tại có cập nhật hay không
+            for (int fromId = 0; fromId < n; fromId++) { // Duyệt qua từng thành phố làm đầu mối cạnh
+                List<Integer> neighbors = adjacencyList.get(fromId); // Lấy danh sách thành phố kề với fromId
+                List<Integer> weights = weightList.get(fromId); // Lấy danh sách trọng số tương ứng với các cạnh
+                for (int edgeIndex = 0; edgeIndex < neighbors.size(); edgeIndex++) { // Duyệt qua từng cạnh cụ thể
+                    int toId = neighbors.get(edgeIndex); // Lấy mã thành phố đích của cạnh
+                    int weight = weights.get(edgeIndex); // Lấy trọng số của cạnh đang xét
+                    if (distance[fromId] + weight < distance[toId]) { // Nếu khoảng cách mới nhỏ hơn giá trị hiện tại
+                        distance[toId] = distance[fromId] + weight; // Cập nhật khoảng cách tốt hơn cho thành phố đích
+                        updated = true; // Đánh dấu có cập nhật trong vòng lặp này
+                    }
+                }
+            }
+            if (!updated) { // Nếu không có cập nhật nào trong toàn bộ vòng lặp
+                break; // Dừng sớm vì không thể cải thiện thêm
+            }
+        }
+        for (int fromId = 0; fromId < n; fromId++) { // Sau khi thư giãn n-1 lần, kiểm tra thêm lần nữa
+            List<Integer> neighbors = adjacencyList.get(fromId); // Lấy danh sách thành phố kề của fromId
+            List<Integer> weights = weightList.get(fromId); // Lấy trọng số tương ứng
+            for (int edgeIndex = 0; edgeIndex < neighbors.size(); edgeIndex++) { // Duyệt qua từng cạnh
+                int toId = neighbors.get(edgeIndex); // Lấy mã thành phố đích của cạnh
+                int weight = weights.get(edgeIndex); // Lấy trọng số tương ứng của cạnh
+                if (distance[fromId] + weight < distance[toId]) { // Nếu vẫn có thể giảm khoảng cách
+                    return true; // Tồn tại chu trình âm nên trả về true
+                }
+            }
+        }
+        return false; // Không phát hiện chu trình âm nào trong đồ thị
+    }
+
     public List<City> breadthFirstTraversal(City start) { // Thuật toán duyệt BFS bắt đầu từ một thành phố
         List<City> order = new ArrayList<>(); // Danh sách lưu thứ tự các thành phố được duyệt
         Set<Integer> visited = new HashSet<>(); // Tập đánh dấu các thành phố đã ghé qua
